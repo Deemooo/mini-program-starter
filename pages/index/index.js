@@ -1,54 +1,70 @@
 //index.js
+import config from '../../config/index.js';
 //获取应用实例
-const app = getApp()
+const app = getApp();
 
-Page({
+const handler = {
   data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    guessCityId: '',
+    guessCity: '西安',
+    hotCities: [],
+    sortGroupCites: []
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
+  onLoad (options) {
+    this.goToGuessCity();
+    this.goToHotCity();
+    this.goToSortCity();
   },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
+  goToGuessCity () {
+    wx.request({
+      url: `${config.baseUrl}/v1/cities`, 
+      data: {
+        type: 'guess'
+      },
+      success: (res) => {
+        let data = res.data;
         this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
+          guessCityId: data.id || ''
+        });
       }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
-    }
-  },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
     })
+  },
+  goToHotCity () {
+    wx.request({
+      url: `${config.baseUrl}/v1/cities`,
+      data: {
+        type: 'hot'
+      },
+      success: (res) => {
+        let data = res.data;
+        this.setData({
+          hotCities: data || []
+        });
+      }
+    })
+  },
+  goToSortCity () {
+    wx.request({
+      url: `${config.baseUrl}/v1/cities`,
+      data: {
+        type: 'group'
+      },
+      success: (res) => {
+        let data = res.data;
+        this.setData({
+          sortGroupCites: this.sortGroupCities(data) || []
+        });
+      }
+    })
+  },
+  sortGroupCities (data) {
+    let sortobj = {};
+    for (let i = 65; i <= 90; i++) {
+      if (data[String.fromCharCode(i)]) {
+        sortobj[String.fromCharCode(i)] = data[String.fromCharCode(i)];
+      }
+    }
+    return sortobj
   }
-})
+};
+Page(handler);
