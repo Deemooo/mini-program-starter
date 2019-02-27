@@ -1,13 +1,28 @@
 <!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<view class="home">
+  <view class="city-nav">
+    <view class="tip">
+      <view class="tip-left">当前定位城市：</view>
+      <view class="tip-right">定位不准时，请在城市列表中选择</view>
+    </view>
+    <view class="guess-city" data-item="{{guessCityId}}" bindtap="goToGuessCity">
+      <view class="guess-city-text">{{guessCity }}</view>
+    </view>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <view class="hot-city">
+    <view class="city-title">热门城市</view>
+    <view class="city-list">
+      <view class="city-item" wx:for="{{hotCities}}" wx:key="{{index}}" data-item="item.id" bindtap="goToHotCity">
+        {{item.name}}
+      </view>
+    </view>
   </view>
+  <view class="sort-city">
+    <view class="city-list">
+      <view class="sort-city-title">{{key}}</view>
+      <view class="city-item group-item" wx:for="{{sortGroupCites}}" wx:key="{{index}}" data-item="item.id" bindtap="goToSortCity">
+        {{item.name}}
+    </view>
+  </view>
+</view>
 </view>
