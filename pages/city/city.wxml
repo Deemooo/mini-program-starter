@@ -1,0 +1,7 @@
+<!--pages/city/city.wxml-->
+<view class="city">
+  <form class="search-form">
+    <input class="search-input form-input" name="search" value="{{inputValue}}" placeholder="输入学校、商务楼、地址" />
+    <button class="search-submit form-input" bindtap="searchPlace">提交</button>
+  </form>
+</view>

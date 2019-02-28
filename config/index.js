@@ -6,6 +6,6 @@
  *
  */
 export default {
-  baseUrl: '//elm.cangdu.org',
-  imgBaseUrl: '//elm.cangdu.org/img/'
+  baseUrl: 'https://elm.cangdu.org',
+  imgBaseUrl: 'https://elm.cangdu.org/img/'
 };
